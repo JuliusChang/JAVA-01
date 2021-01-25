@@ -20,6 +20,8 @@ public class NettyGateWayHandler extends ChannelInboundHandlerAdapter {
 
     private String proxyServer;
 
+    private HttpResponseFilter httpResponseFilter;
+
     public NettyGateWayHandler(String proxyServer) {
         this.proxyServer = proxyServer;
     }
@@ -30,10 +32,13 @@ public class NettyGateWayHandler extends ChannelInboundHandlerAdapter {
         System.out.println(value);
         FullHttpRequest fullRequest = (FullHttpRequest) msg;
         FullHttpResponse response = null;
+        httpResponseFilter = new HeaderHttpResponseFiler();
+
         try {
             response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(value.getBytes("UTF-8")));
             response.headers().set("Content-Type", "application/json");
             response.headers().setInt("Content-Length", response.content().readableBytes());
+            httpResponseFilter.filter(response);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="Chauncy" class="dynamicProxy.UserServiceImpl"></bean>
+    <bean id="dynamicProxy" class="dynamicProxy.dynamicProxy"></bean>
+
+    <aop:config>
+        <aop:pointcut id="log" expression="execution(* dynamicProxy..*.*(..))"/>
+        <aop:advisor advice-ref="dynamicProxy" pointcut-ref="log"></aop:advisor>
+    </aop:config>
+
+
+
+    <context:component-scan base-package="springBean"/>
+
+    <bean id="wangcai" class="springBean.Dog"></bean>
+
+    <bean id="class" class="springXmlBean.Classes">
+        <property name="names">
+            <list>
+                <value>chauncy</value>
+                <value>qinqinqin</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>
+
